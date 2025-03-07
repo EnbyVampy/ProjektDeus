@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+}
+
+sourceSets {
+    client {
+        java {
+            srcDirs = ['src/main/java']
+            include 'us/projektdeus/client/**'
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+    server {
+        java {
+            srcDirs = ['src/main/java']
+            include 'us/projektdeus/server/**'
+        }
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
+
+tasks.jar {
+    enabled = false
+}
+
+
+tasks.register('jarClient', Jar) {
+    group = 'build'
+    description = 'Builds the JAR for the Client application'
+    archiveClassifier.set('client')
+    manifest {
+        attributes(
+                'Main-Class': 'us.projektdeus.client.Main'
+        )
+    }
+    from sourceSets.client.output // Include compiled Client classes
+}
+tasks.register('jarServer', Jar) {
+    group = 'build'
+    description = 'Builds the JAR for the Server application'
+    archiveClassifier.set('server')
+    manifest {
+        attributes(
+                'Main-Class': 'us.projektdeus.server.Main'
+        )
+    }
+    from sourceSets.server.output
+}
+tasks.build {
+    dependsOn tasks.jarClient, tasks.jarServer
+}
