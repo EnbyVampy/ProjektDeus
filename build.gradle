@@ -35,10 +35,48 @@ tasks.register('jarClient', Jar) {
     archiveClassifier.set('client')
     manifest {
         attributes(
-                'Main-Class': 'us.projektdeus.client.Main'
+                'Main-Class': 'us.projektdeus.client.ProjektDeusClient'
         )
     }
     from sourceSets.client.output // Include compiled Client classes
+    repositories {
+        mavenCentral() // Add this if it's missing
+    }
+
+    dependencies {
+        // LWJGL Core Libraries
+        implementation "org.lwjgl:lwjgl:3.3.2"
+        implementation "org.lwjgl:lwjgl-glfw:3.3.2"
+        implementation "org.lwjgl:lwjgl-opengl:3.3.2"
+        implementation "org.lwjgl:lwjgl-stb:3.3.2"
+
+        implementation "org.lwjgl:lwjgl-nanovg:3.3.2"
+        runtimeOnly "org.lwjgl:lwjgl-nanovg:3.3.2:natives-windows"
+
+
+        implementation "org.lwjgl:lwjgl:3.3.1"
+        implementation "org.lwjgl:lwjgl-glfw:3.3.1"
+        implementation "org.lwjgl:lwjgl-opengl:3.3.1"
+        runtimeOnly "org.lwjgl:lwjgl:3.3.1:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-glfw:3.3.1:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-opengl:3.3.1:natives-windows"
+
+
+        // Native bindings for your platform (adjust natives for your OS)
+        runtimeOnly "org.lwjgl:lwjgl:3.3.2:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-glfw:3.3.2:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-opengl:3.3.2:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-stb:3.3.2:natives-windows"
+
+
+
+
+
+        // Native bindings for Windows
+        runtimeOnly "org.lwjgl:lwjgl:3.3.2:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-glfw:3.3.2:natives-windows"
+        runtimeOnly "org.lwjgl:lwjgl-opengl:3.3.2:natives-windows"
+    }
 }
 tasks.register('jarServer', Jar) {
     group = 'build'
@@ -46,7 +84,7 @@ tasks.register('jarServer', Jar) {
     archiveClassifier.set('server')
     manifest {
         attributes(
-                'Main-Class': 'us.projektdeus.server.Main'
+                'Main-Class': 'us.projektdeus.server.ProjektDeusServer'
         )
     }
     from sourceSets.server.output
@@ -54,3 +92,4 @@ tasks.register('jarServer', Jar) {
 tasks.build {
     dependsOn tasks.jarClient, tasks.jarServer
 }
+

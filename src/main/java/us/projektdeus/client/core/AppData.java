@@ -1,5 +1,6 @@
 package us.projektdeus.client.core;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class AppData {
@@ -10,69 +11,73 @@ public class AppData {
     public static int ScreenW = ScreenSize.width;
     public static int ThemeNum = 0;
 
-    public static class MainFrame {//MainFrame
+    public static class MainFrame {//jFrame_MainFrame
         public static int H = 600;
         public static int W = 800;
         public static int X = (ScreenW - W) / 2;
         public static int Y = (ScreenH - H) / 2;
     }
-
-    public static class FramePanel {//FramePanel
+    public static class FramePanel {//jPanel_Frame
         public static int X = 0;
         public static int Y = 0;
         public static int W = MainFrame.W;
         public static int H = MainFrame.H;
     }
-
-    public static class ContentPanel {//ContentPanel
+    public static class ContentPanel {//jPanel_Content
         public static int Border = 1;
         public static int X = Border;
         public static int Y = Border;
         public static int W = FramePanel.W - Border * 2;
         public static int H = FramePanel.H - Border * 2;
     }
-
-    public static class ContentHeader {//ContentHeader
+    public static class ContentHeader {//jPanel_Header
         public static int X = 0;
         public static int Y = 0;
         public static int W = MainFrame.W - ContentPanel.Border * 2;
         public static int H = 20;
     }
-
-    public static class HeaderLabel {//HeaderLabel
+    public static class HeaderLabel {//jLabel_Header
         public static int W = ContentHeader.W / 4 - ContentPanel.Border * 2;
         public static int H = ContentHeader.H;
         public static int X = ContentPanel.W / 2 - HeaderLabel.W / 2;
         public static int Y = 0;
     }
-
-    public static class DesktopPane {//DesktopPane
+    public static class DesktopPane {//jDesktopPane_Desktop
         public static int X = 0;
         public static int Y = ContentHeader.H;
         public static int W = ContentPanel.W;
         public static int H = ContentPanel.H - ContentHeader.H;
     }
-
-    public static class CloseButton {//CloseButton
+    public static class CloseButton {//jButton_Close
         public static int W = ContentHeader.H;
         public static int H = ContentHeader.H;
         public static int X = ContentHeader.W - CloseButton.W;
         public static int Y = 0;
     }
-
-    public static class ResizeButton {//ResizeButton
+    public static class ResizeButton {//jButton_Maximize
         public static int W = ContentHeader.H;
         public static int H = ContentHeader.H;
         public static int X = ContentHeader.W - CloseButton.W - ResizeButton.W - 2;
         public static int Y = 0;
     }
-
-    public static class MinimizeButton {//MinimizeButton
+    public static class jButton_Minimize {//jButton_Minimize
         public static int W = ContentHeader.H;
         public static int H = ContentHeader.H;
-        public static int X = ContentHeader.W - CloseButton.W - ResizeButton.W - MinimizeButton.W - 4;
+        public static int X = ContentHeader.W - CloseButton.W - ResizeButton.W - jButton_Minimize.W - 4;
         public static int Y = 0;
     }
+
+    public static class jPanel_TaskBar {//jPanel_TaskBar
+        public static int W = DesktopPane.W;
+        public static int H = 30;
+        public static int X = 0;
+        public static int Y = DesktopPane.H-jPanel_TaskBar.H;
+    }
+
+
+
+
+
 
     public static class FontData {
         public static Font HeaderLabelFont = new Font("Arial", Font.BOLD, HeaderLabel.H);
@@ -159,15 +164,16 @@ public class AppData {
     };
 
     public static final Object[] DIM = new Object[]{
-        new Integer[]{MainFrame.X, MainFrame.Y, MainFrame.W, MainFrame.H},
-        new Integer[]{FramePanel.X, FramePanel.Y, FramePanel.W, FramePanel.H},
-        new Integer[]{ContentPanel.X, ContentPanel.Y, ContentPanel.W, ContentPanel.H},
-        new Integer[]{ContentHeader.X, ContentHeader.Y, ContentHeader.W, ContentHeader.H},
-        new Integer[]{HeaderLabel.X, HeaderLabel.Y, HeaderLabel.W, HeaderLabel.H},
-        new Integer[]{DesktopPane.X, DesktopPane.Y, DesktopPane.W, DesktopPane.H},
-        new Integer[]{CloseButton.X, CloseButton.Y, CloseButton.W, CloseButton.H},
-        new Integer[]{ResizeButton.X, ResizeButton.Y, ResizeButton.W, ResizeButton.H},
-        new Integer[]{MinimizeButton.X, MinimizeButton.Y, MinimizeButton.W, MinimizeButton.H},
+        new Integer[]{       MainFrame.X,        MainFrame.Y,          MainFrame.W,          MainFrame.H },
+        new Integer[]{      FramePanel.X,       FramePanel.Y,         FramePanel.W,         FramePanel.H },
+        new Integer[]{    ContentPanel.X,     ContentPanel.Y,       ContentPanel.W,       ContentPanel.H },
+        new Integer[]{   ContentHeader.X,    ContentHeader.Y,      ContentHeader.W,      ContentHeader.H },
+        new Integer[]{     HeaderLabel.X,      HeaderLabel.Y,        HeaderLabel.W,        HeaderLabel.H },
+        new Integer[]{     DesktopPane.X,      DesktopPane.Y,        DesktopPane.W,        DesktopPane.H },
+        new Integer[]{     CloseButton.X,      CloseButton.Y,        CloseButton.W,        CloseButton.H },
+        new Integer[]{    ResizeButton.X,     ResizeButton.Y,       ResizeButton.W,       ResizeButton.H },
+        new Integer[]{jButton_Minimize.X, jButton_Minimize.Y,   jButton_Minimize.W,   jButton_Minimize.H },
+        new Integer[]{  jPanel_TaskBar.X,   jPanel_TaskBar.Y,     jPanel_TaskBar.W,     jPanel_TaskBar.H },
     };
 
     public static final Object[] APPDATA = new Object[]{
@@ -180,5 +186,6 @@ public class AppData {
         new Object[]{DIM[6], ThemeData[0], Fonts[0]},
         new Object[]{DIM[7], ThemeData[0], Fonts[0]},
         new Object[]{DIM[8], ThemeData[0], Fonts[0]},
+        new Object[]{DIM[9], ThemeData[0], Fonts[0]},
     };
 }

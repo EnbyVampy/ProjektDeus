@@ -2,15 +2,13 @@ package us.projektdeus.client.application;
 
 import javax.swing.*;
 import java.awt.*;
-
-//import static us.projektdeus.client.core.AppData.MainWindowData.APPDATA;
+import static us.projektdeus.client.core.AppData.APPDATA;
 
 public class TaskBar {
-
     public static JPanel jPanel_TaskBar;
 
     public static void initTaskBar(){
-//        jPanel_TaskBar = create_jPanel_TaskBar((Object[]) APPDATA[9]);
+        jPanel_TaskBar = create_jPanel_TaskBar((Object[]) APPDATA[9]);
     }
 
     public static JPanel create_jPanel_TaskBar(Object[]args){
@@ -26,13 +24,6 @@ public class TaskBar {
         System.out.println("TaskBar created");
         return jPanel_TaskBar;
     }
-
-
-
-
-
-
-
 
 
 
