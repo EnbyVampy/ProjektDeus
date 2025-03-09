@@ -21,20 +21,29 @@ public class MainWindow {
 
     public static void initFrames()  {
         jFrame_MainFrame     = create_jFrame_MainFrame     ((Object[]) APPDATA[0]);                                                  //MFArgs = A when passed to initMF
-        jPanel_Frame         = create_jPanel_Frame         ((Object[]) APPDATA[1]);    jFrame_MainFrame.add( jPanel_Frame );         //FPArgs = B when passed to initFP
-        jPanel_Content       = create_jPanel_Content       ((Object[]) APPDATA[2]);    jPanel_Frame    .add( jPanel_Content );       //CPArgs = C when passed to initCP
-        jPanel_Header        = create_jPanel_Header        ((Object[]) APPDATA[3]);    jPanel_Content  .add( jPanel_Header );        //HPArgs = D when passed to initHP
-        jLabel_Header        = create_jLabel_Header        ((Object[]) APPDATA[4]);    jPanel_Header   .add( jLabel_Header );        //TLArgs = E when passed to initTL
-        jDesktopPane_Desktop = create_jDesktopPane_Desktop ((Object[]) APPDATA[5]);    jPanel_Content  .add( jDesktopPane_Desktop ); //DPArgs = F when passed to initDP
-        jButton_Close        = create_jButton_Close        ((Object[]) APPDATA[6]);    jPanel_Header   .add( jButton_Close );        //CBArgs = G when passed to initCB
-        jButton_Maximize     = create_jButton_Maximize     ((Object[]) APPDATA[7]);    jPanel_Header   .add( jButton_Maximize );     //RBArgs = H when passed to initCB
-        jButton_Minimize     = create_jButton_Minimize     ((Object[]) APPDATA[8]);    jPanel_Header   .add( jButton_Minimize );     //MBArgs = I when passed to initCB
+        jPanel_Frame         = create_jPanel_Frame         ((Object[]) APPDATA[1]);//FPArgs = B when passed to initFP
+        jPanel_Content       = create_jPanel_Content       ((Object[]) APPDATA[2]);//CPArgs = C when passed to initCP
+        jDesktopPane_Desktop = create_jDesktopPane_Desktop ((Object[]) APPDATA[5]);//DPArgs = F when passed to initDP
+        jButton_Close        = create_jButton_Close        ((Object[]) APPDATA[6]);//CBArgs = G when passed to initCB
+        jButton_Maximize     = create_jButton_Maximize     ((Object[]) APPDATA[7]);//RBArgs = H when passed to initCB
+        jButton_Minimize     = create_jButton_Minimize     ((Object[]) APPDATA[8]);//MBArgs = I when passed to initCB
+        jPanel_Header        = create_jPanel_Header        ((Object[]) APPDATA[3]);//HPArgs = D when passed to initHP
+        jLabel_Header        = create_jLabel_Header        ((Object[]) APPDATA[4]);//TLArgs = E when passed to initTL
+
+        jPanel_Header   .add( jButton_Minimize );       //add jButton_Minimize to jPanel_Header
+        jPanel_Header   .add( jButton_Maximize );       //add jButton_Maximize to jPanel_Header
+        jPanel_Header   .add( jButton_Close );          //add jButton_Close to jPanel_Header
+        jPanel_Header   .add( jLabel_Header );          //add jLabel_Header to jPanel_Header
+        jPanel_Frame    .add( jPanel_Content );         //add jPanel_Content to jPanel_Frame
+        jFrame_MainFrame.add( jPanel_Frame );           //add jPanel_Frame to jFrame_MainFrame
+        jPanel_Content  .add( jPanel_Header );          //add jPanel_Header to jPanel_Content
+        jPanel_Content  .add( jDesktopPane_Desktop );   //add jDesktopPane to jPanel_Content
 
         jPanel_Header.addMouseListener(FrameUtils.enableHeaderFrameDrag(jPanel_Header,jFrame_MainFrame));
         FrameUtils.ResizeListener.addResizeable(jFrame_MainFrame);
 
-
-
+        jFrame_MainFrame.revalidate();
+        jFrame_MainFrame.repaint();
 
 
     }
@@ -48,11 +57,12 @@ public class MainWindow {
         jButton_Minimize.setContentAreaFilled(false);
         jButton_Minimize.setFocusPainted(false);
         jButton_Minimize.setOpaque(true);
-        jButton_Minimize.setVisible(true);
         jButton_Minimize.setBackground(TH[12]);
+
         FrameUtils.addButtonAction(jButton_Minimize,0,2,TH[12],TH[13]);
         Icon minimizeIcon = FrameUtils.createMinimizeButtonIcon(jButton_Minimize.getHeight(),TH[14], 2,6);//6
         jButton_Minimize.setIcon(minimizeIcon);
+        jButton_Minimize.setVisible(true);
         return jButton_Minimize;
     }
     private static JButton create_jButton_Maximize(Object[]args){
@@ -65,11 +75,12 @@ public class MainWindow {
         jButton_Maximize.setContentAreaFilled(false);
         jButton_Maximize.setFocusPainted(false);
         jButton_Maximize.setOpaque(true);
-        jButton_Maximize.setVisible(true);
         jButton_Maximize.setBackground(TH[9]);
+
         FrameUtils.addButtonAction(jButton_Maximize,0,1,TH[9],TH[10]);
         Icon resizeIcon = FrameUtils.createResizeButtonIcon(jButton_Maximize.getHeight(),TH[11], 2,8);//4
         jButton_Maximize.setIcon(resizeIcon);
+        jButton_Maximize.setVisible(true);
         return jButton_Maximize;
     }
     private static JButton create_jButton_Close(Object[]args){
@@ -82,11 +93,12 @@ public class MainWindow {
         jButton_Close.setContentAreaFilled(false);
         jButton_Close.setFocusPainted(false);
         jButton_Close.setOpaque(true);
-        jButton_Close.setVisible(true);
         jButton_Close.setBackground(TH[6]);
+
         FrameUtils.addButtonAction(jButton_Close,0,0,TH[6],TH[7]);
         Icon closeIcon = FrameUtils.createCloseButtonIcon(jButton_Close.getHeight(),TH[8], 2,6);//6
         jButton_Close.setIcon(closeIcon);
+        jButton_Close.setVisible(true);
         return jButton_Close;
     }
     public static JDesktopPane create_jDesktopPane_Desktop(Object[] args){

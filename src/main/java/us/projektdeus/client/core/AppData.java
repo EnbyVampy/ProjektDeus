@@ -79,22 +79,21 @@ public class AppData {
     }
 
     public static class DarkTheme {
-        public static Color FramePanelBG = new Color(0x414243);     //BorderColor
-        public static Color HeaderPanelBG = new Color(0x1e1f22);    //Header Color
-        public static Color HeaderLabelBG = new Color(0x313338);    //TitleLabel Color
-        public static Color Spacer = new Color(0x313338);
-        public static Color HeaderLabelFG = new Color(0x1e1f22);
-        public static Color DesktopPanelBG = new Color(0x000000);   //DesktopPanel BG
-
-        public static Color CloseButtonBG = new Color(0x1e1f22);
-        public static Color CloseButtonHoverBG = new Color(0x994457);
-        public static Color CloseButtonFG = new Color(0x313338);
-        public static Color ResizeButtonBG = new Color(0x1e1f22);
-        public static Color ResizeButtonHoverBG = new Color(0x669944);
-        public static Color ResizeButtonFG = new Color(0x313338);
-        public static Color MinimizeButtonBG = new Color(0x1e1f22);
-        public static Color MinimizeButtonHoverBG = new Color(0x6677B3);
-        public static Color MinimizeButtonFG = new Color(0x313338);
+        public static Color FramePanelBG = new Color(0x414243);     //Border        [0]
+        public static Color HeaderPanelBG = new Color(0x1e1f22);    //Header        [1]
+        public static Color HeaderLabelBG = new Color(0x313338);    //Title         [2]
+        public static Color Spacer = new Color(0x313338);           //Spacer        [3]
+        public static Color HeaderLabelFG = new Color(0x1e1f22);    //Header        [4]
+        public static Color DesktopPanelBG = new Color(0x000000);   //Desktop       [5]
+        public static Color CloseButtonBG = new Color(0x1e1f22);    //closeBG       [6]
+        public static Color CloseButtonHoverBG = new Color(0x994457);//closeHov     [7]
+        public static Color CloseButtonFG = new Color(0x313338);//closeText         [8]
+        public static Color ResizeButtonBG = new Color(0x1e1f22);//resizeBG         [9]
+        public static Color ResizeButtonHoverBG = new Color(0x669944);//resizeHov   [10]
+        public static Color ResizeButtonFG = new Color(0x313338);//resizeText       [11]
+        public static Color MinimizeButtonBG = new Color(0x1e1f22);//minBG          [12]
+        public static Color MinimizeButtonHoverBG = new Color(0x6677B3);//minHov    [13]
+        public static Color MinimizeButtonFG = new Color(0x313338);//minText        [14]
     }
 
     public static class LiteTheme {
