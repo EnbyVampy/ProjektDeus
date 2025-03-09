@@ -74,6 +74,13 @@ public class AppData {
         public static int Y = 0;
     }
 
+    public static class TaskBar {
+        public static int X = 0;
+        public static int Y = DesktopPane.H - TaskBar.H;
+        public static int W = DesktopPane.W;
+        public static int H = 20;
+    }
+
     public static class FontData {
         public static Font HeaderLabelFont = new Font("Arial", Font.BOLD, HeaderLabel.H);
     }
@@ -94,6 +101,9 @@ public class AppData {
         public static Color MinimizeButtonBG = new Color(0x1e1f22);//minBG          [12]
         public static Color MinimizeButtonHoverBG = new Color(0x6677B3);//minHov    [13]
         public static Color MinimizeButtonFG = new Color(0x313338);//minText        [14]
+        public static Color TaskBarBG = new Color(0xcc00000);
+        public static Color TaskBarText = new Color(0xffffff);
+
     }
 
     public static class LiteTheme {
@@ -132,6 +142,8 @@ public class AppData {
                     DarkTheme.MinimizeButtonBG,     //[12]
                     DarkTheme.MinimizeButtonHoverBG,//[13]
                     DarkTheme.MinimizeButtonFG,     //[14]
+                    DarkTheme.TaskBarBG,            //[15]
+                    DarkTheme.TaskBarText,          //[16]
 
             },
             new Color[]{
@@ -158,15 +170,16 @@ public class AppData {
     };
 
     public static final Object[] DIM = new Object[]{
-        new Integer[]{MainFrame.X, MainFrame.Y, MainFrame.W, MainFrame.H},
-        new Integer[]{FramePanel.X, FramePanel.Y, FramePanel.W, FramePanel.H},
-        new Integer[]{ContentPanel.X, ContentPanel.Y, ContentPanel.W, ContentPanel.H},
-        new Integer[]{ContentHeader.X, ContentHeader.Y, ContentHeader.W, ContentHeader.H},
-        new Integer[]{HeaderLabel.X, HeaderLabel.Y, HeaderLabel.W, HeaderLabel.H},
-        new Integer[]{DesktopPane.X, DesktopPane.Y, DesktopPane.W, DesktopPane.H},
-        new Integer[]{CloseButton.X, CloseButton.Y, CloseButton.W, CloseButton.H},
-        new Integer[]{ResizeButton.X, ResizeButton.Y, ResizeButton.W, ResizeButton.H},
-        new Integer[]{MinimizeButton.X, MinimizeButton.Y, MinimizeButton.W, MinimizeButton.H},
+        new Integer[]{MainFrame.X, MainFrame.Y, MainFrame.W, MainFrame.H},//[0]
+        new Integer[]{FramePanel.X, FramePanel.Y, FramePanel.W, FramePanel.H},//[1]
+        new Integer[]{ContentPanel.X, ContentPanel.Y, ContentPanel.W, ContentPanel.H},//[2]
+        new Integer[]{ContentHeader.X, ContentHeader.Y, ContentHeader.W, ContentHeader.H},//[3]
+        new Integer[]{HeaderLabel.X, HeaderLabel.Y, HeaderLabel.W, HeaderLabel.H},//[4]
+        new Integer[]{DesktopPane.X, DesktopPane.Y, DesktopPane.W, DesktopPane.H},//[5]
+        new Integer[]{CloseButton.X, CloseButton.Y, CloseButton.W, CloseButton.H},//[6]
+        new Integer[]{ResizeButton.X, ResizeButton.Y, ResizeButton.W, ResizeButton.H},//[7]
+        new Integer[]{MinimizeButton.X, MinimizeButton.Y, MinimizeButton.W, MinimizeButton.H},//[8]
+        new Integer[]{TaskBar.X, TaskBar.Y, TaskBar.W, TaskBar.H},//[9]
     };
 
     public static final Object[] APPDATA = new Object[]{
@@ -179,5 +192,6 @@ public class AppData {
         new Object[]{DIM[6], ThemeData[0], Fonts[0]},
         new Object[]{DIM[7], ThemeData[0], Fonts[0]},
         new Object[]{DIM[8], ThemeData[0], Fonts[0]},
+        new Object[]{DIM[9], ThemeData[0], Fonts[0]},
     };
 }

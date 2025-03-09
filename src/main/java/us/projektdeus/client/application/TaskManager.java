@@ -1,5 +1,6 @@
 package us.projektdeus.client.application;
 
+import us.projektdeus.client.core.AppData;
 import us.projektdeus.client.core.MainWindow;
 
 import javax.swing.*;
@@ -10,12 +11,14 @@ public class TaskManager {
         //Create the main Window
         MainWindow.initFrames();
         System.out.println("MainWindow Initialized");
+
         //Create the TaskBar
         TaskBar.initTaskBar();
         System.out.println("TaskManager Initialized");
+
         //Add the TaskBar to Desktop
         JDesktopPane Desktop = MainWindow.jDesktopPane_Desktop;
-//        Desktop.add(TaskBar.jPanel_TaskBar);
+        Desktop.add(TaskBar.jPanel_Taskbar);
         System.out.println("TaskManager Added to Desktop");
 
 

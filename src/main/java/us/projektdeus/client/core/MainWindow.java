@@ -2,9 +2,10 @@ package us.projektdeus.client.core;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 
 import static us.projektdeus.client.core.AppData.APPDATA;
-//import static us.projektdeus.client.core.AppData.MainWindowData.APPDATA;
 
 public class MainWindow {
 
@@ -23,21 +24,26 @@ public class MainWindow {
         jFrame_MainFrame     = create_jFrame_MainFrame     ((Object[]) APPDATA[0]);                                                  //MFArgs = A when passed to initMF
         jPanel_Frame         = create_jPanel_Frame         ((Object[]) APPDATA[1]);//FPArgs = B when passed to initFP
         jPanel_Content       = create_jPanel_Content       ((Object[]) APPDATA[2]);//CPArgs = C when passed to initCP
+        jPanel_Header        = create_jPanel_Header        ((Object[]) APPDATA[3]);//HPArgs = D when passed to initHP
+        jLabel_Header        = create_jLabel_Header        ((Object[]) APPDATA[4]);//TLArgs = E when passed to initTL
         jDesktopPane_Desktop = create_jDesktopPane_Desktop ((Object[]) APPDATA[5]);//DPArgs = F when passed to initDP
         jButton_Close        = create_jButton_Close        ((Object[]) APPDATA[6]);//CBArgs = G when passed to initCB
         jButton_Maximize     = create_jButton_Maximize     ((Object[]) APPDATA[7]);//RBArgs = H when passed to initCB
         jButton_Minimize     = create_jButton_Minimize     ((Object[]) APPDATA[8]);//MBArgs = I when passed to initCB
-        jPanel_Header        = create_jPanel_Header        ((Object[]) APPDATA[3]);//HPArgs = D when passed to initHP
-        jLabel_Header        = create_jLabel_Header        ((Object[]) APPDATA[4]);//TLArgs = E when passed to initTL
 
+        jFrame_MainFrame.add( jPanel_Frame );           //add jPanel_Frame to jFrame_MainFrame
+        jPanel_Frame    .add( jPanel_Content );         //add jPanel_Content to jPanel_Frame
+        jPanel_Content  .add( jDesktopPane_Desktop );   //add jDesktopPane to jPanel_Content
+        jPanel_Content  .add( jPanel_Header );          //add jPanel_Header to jPanel_Content
+        jPanel_Header   .add( jLabel_Header );          //add jLabel_Header to jPanel_Header
         jPanel_Header   .add( jButton_Minimize );       //add jButton_Minimize to jPanel_Header
         jPanel_Header   .add( jButton_Maximize );       //add jButton_Maximize to jPanel_Header
         jPanel_Header   .add( jButton_Close );          //add jButton_Close to jPanel_Header
-        jPanel_Header   .add( jLabel_Header );          //add jLabel_Header to jPanel_Header
-        jPanel_Frame    .add( jPanel_Content );         //add jPanel_Content to jPanel_Frame
-        jFrame_MainFrame.add( jPanel_Frame );           //add jPanel_Frame to jFrame_MainFrame
-        jPanel_Content  .add( jPanel_Header );          //add jPanel_Header to jPanel_Content
-        jPanel_Content  .add( jDesktopPane_Desktop );   //add jDesktopPane to jPanel_Content
+
+
+
+
+
 
         jPanel_Header.addMouseListener(FrameUtils.enableHeaderFrameDrag(jPanel_Header,jFrame_MainFrame));
         FrameUtils.ResizeListener.addResizeable(jFrame_MainFrame);
@@ -108,6 +114,26 @@ public class MainWindow {
         JDesktopPane jDesktopPane_Desktop = new JDesktopPane();
         jDesktopPane_Desktop.setBounds(DIM[0],DIM[1],DIM[2],DIM[3]);
         jDesktopPane_Desktop.setVisible(true);
+
+        jDesktopPane_Desktop.addContainerListener(new ContainerListener() {
+            @Override
+            public void componentAdded(ContainerEvent e) {
+                System.out.println("Component added: " + e.getChild());
+                // Revalidate and repaint when a new component is added
+                jFrame_MainFrame.revalidate();
+                jFrame_MainFrame.repaint();
+            }
+
+            @Override
+            public void componentRemoved(ContainerEvent e) {
+                System.out.println("Component removed: " + e.getChild());
+                // Optionally handle the remove event
+                jFrame_MainFrame.revalidate();
+                jFrame_MainFrame.repaint();
+            }
+        });
+
+
         jDesktopPane_Desktop.setDragMode(JDesktopPane.LIVE_DRAG_MODE);
         jDesktopPane_Desktop.setBackground(TH[5]);
         return jDesktopPane_Desktop;
@@ -167,6 +193,7 @@ public class MainWindow {
         jFrame_MainFrame.setResizable(false);
         jFrame_MainFrame.setLocationRelativeTo(null);
         jFrame_MainFrame.setLayout(null);
+
         jFrame_MainFrame.setVisible(true);
         return jFrame_MainFrame;
     }
