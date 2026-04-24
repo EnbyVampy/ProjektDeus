@@ -6,10 +6,20 @@ import java.util.Properties;
 public class GalaxySettings {
     public volatile boolean needsRegeneration = true;
 
-    // Global
+    // Global & Debug
     public int starCount = 5000;
     public float starSize = 3.0f;
     public float sersicIndex = 1.0f;
+    public boolean showFloor = false; // Disabled by default
+
+    // Galaxy Orientation
+    public float galaxyRotX = 0.0f;
+    public float galaxyRotY = 0.0f;
+
+    // Linked Distribution (%)
+    public float innerCorePercent = 20.0f;
+    public float outerCorePercent = 30.0f;
+    public float armsPercent = 50.0f;
 
     // Inner Core
     public float innerCoreRadius = 5.0f;
@@ -39,6 +49,12 @@ public class GalaxySettings {
         p.setProperty("starCount", String.valueOf(starCount));
         p.setProperty("starSize", String.valueOf(starSize));
         p.setProperty("sersicIndex", String.valueOf(sersicIndex));
+        p.setProperty("showFloor", String.valueOf(showFloor));
+        p.setProperty("galaxyRotX", String.valueOf(galaxyRotX));
+        p.setProperty("galaxyRotY", String.valueOf(galaxyRotY));
+        p.setProperty("innerCorePercent", String.valueOf(innerCorePercent));
+        p.setProperty("outerCorePercent", String.valueOf(outerCorePercent));
+        p.setProperty("armsPercent", String.valueOf(armsPercent));
         p.setProperty("innerCoreRadius", String.valueOf(innerCoreRadius));
         p.setProperty("innerCoreSquish", String.valueOf(innerCoreSquish));
         p.setProperty("innerCoreNoise", String.valueOf(innerCoreNoise));
@@ -63,6 +79,12 @@ public class GalaxySettings {
         starCount = Integer.parseInt(p.getProperty("starCount", "5000"));
         starSize = Float.parseFloat(p.getProperty("starSize", "3.0"));
         sersicIndex = Float.parseFloat(p.getProperty("sersicIndex", "1.0"));
+        showFloor = Boolean.parseBoolean(p.getProperty("showFloor", "false"));
+        galaxyRotX = Float.parseFloat(p.getProperty("galaxyRotX", "0.0"));
+        galaxyRotY = Float.parseFloat(p.getProperty("galaxyRotY", "0.0"));
+        innerCorePercent = Float.parseFloat(p.getProperty("innerCorePercent", "20.0"));
+        outerCorePercent = Float.parseFloat(p.getProperty("outerCorePercent", "30.0"));
+        armsPercent = Float.parseFloat(p.getProperty("armsPercent", "50.0"));
         innerCoreRadius = Float.parseFloat(p.getProperty("innerCoreRadius", "5.0"));
         innerCoreSquish = Float.parseFloat(p.getProperty("innerCoreSquish", "0.9"));
         innerCoreNoise = Float.parseFloat(p.getProperty("innerCoreNoise", "1.0"));

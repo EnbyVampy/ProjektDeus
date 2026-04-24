@@ -9,7 +9,8 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
-    private int width = 1280, height = 720;
+    private int width = 1280;
+    private int height = 720;
     private final GalaxySettings settings = new GalaxySettings();
     private final GalaxyData galaxy = new GalaxyData();
     private final Camera camera = new Camera();
@@ -30,9 +31,16 @@ public class Main {
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
         input.setup(window, camera);
+
         glfwSetFramebufferSizeCallback(window, (win, w, h) -> updateProjection(w, h));
         updateProjection(width, height);
+
         glEnable(GL_DEPTH_TEST);
+
+        // --- ADDED FOR BETTER VISUALS ---
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         glClearColor(0, 0, 0.02f, 1);
     }
 
@@ -54,7 +62,9 @@ public class Main {
             }
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             camera.applyTransformation();
+
             renderer.render(galaxy, settings);
+
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
