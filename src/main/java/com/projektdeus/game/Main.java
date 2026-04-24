@@ -1,57 +1,49 @@
 package com.projektdeus.game;
 
 import com.projektdeus.game.core.*;
-import com.projektdeus.game.ui.DebugUI;
+import com.projektdeus.game.ui.*;
+import imgui.ImGui;
+import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
 import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Main {
     private long window;
-    private int width = 1280;
-    private int height = 720;
-    private final GalaxySettings settings = new GalaxySettings();
-    private final GalaxyData galaxy = new GalaxyData();
-    private final Camera camera = new Camera();
-    private final Renderer renderer = new Renderer();
-    private final InputHandler input = new InputHandler();
+    private final ImGuiImplGlfw imGuiGlfw = new ImGuiImplGlfw();
+    private final ImGuiImplGl3 imGuiGl3 = new ImGuiImplGl3();
+
+    private GalaxySettings settings = new GalaxySettings();
+    private GalaxyData galaxy = new GalaxyData();
+    private ArchitectApp architect;
+    private GalaxyViewerApp viewer;
+    private InputHandler input = new InputHandler();
 
     public void run() {
         init();
-        new DebugUI(settings);
         loop();
-        glfwDestroyWindow(window);
-        glfwTerminate();
+        destroy();
     }
 
     private void init() {
-        if (!glfwInit()) throw new IllegalStateException("GLFW failed");
-        window = glfwCreateWindow(width, height, "Galaxy Progenitor", NULL, NULL);
+        glfwInit();
+        window = glfwCreateWindow(1600, 900, "DeusOS", 0, 0);
         glfwMakeContextCurrent(window);
         GL.createCapabilities();
-        input.setup(window, camera);
 
-        glfwSetFramebufferSizeCallback(window, (win, w, h) -> updateProjection(w, h));
-        updateProjection(width, height);
+        ImGui.createContext();
+        imGuiGlfw.init(window, true);
+        imGuiGl3.init("#version 130");
 
-        glEnable(GL_DEPTH_TEST);
+        architect = new ArchitectApp(settings);
+        viewer = new GalaxyViewerApp();
 
-        // --- ADDED FOR BETTER VISUALS ---
+        // Pass the camera inside the viewer to the input handler
+        input.setup(window, viewer);
+
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        glClearColor(0, 0, 0.02f, 1);
-    }
-
-    private void updateProjection(int w, int h) {
-        glViewport(0, 0, w, h);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        float aspect = (float) w / (float) h;
-        float f = (float) (1.0 / Math.tan(Math.toRadians(45.0) / 2.0));
-        glMultMatrixf(new float[]{f/aspect,0,0,0, 0,f,0,0, 0,0,1000.1f/-999.9f,-1, 0,0,(2*1000*0.1f)/-999.9f,0});
-        glMatrixMode(GL_MODELVIEW);
     }
 
     private void loop() {
@@ -60,14 +52,46 @@ public class Main {
                 galaxy.regenerate(settings);
                 settings.needsRegeneration = false;
             }
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            camera.applyTransformation();
 
-            renderer.render(galaxy, settings);
+            // Start ImGui Frame
+            glClear(GL_COLOR_BUFFER_BIT);
+            imGuiGlfw.newFrame();
+            ImGui.newFrame();
+
+            // OS Components
+            renderMainMenuBar();
+            architect.render();
+            viewer.render(galaxy, settings);
+
+            // Final Render
+            ImGui.render();
+            imGuiGl3.renderDrawData(ImGui.getDrawData());
 
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
+    }
+
+    private void renderMainMenuBar() {
+        if (ImGui.beginMainMenuBar()) {
+            if (ImGui.beginMenu("OS")) {
+                if (ImGui.menuItem("Exit")) glfwSetWindowShouldClose(window, true);
+                ImGui.endMenu();
+            }
+            if (ImGui.beginMenu("Applications")) {
+                if (ImGui.menuItem("Galaxy Architect")) architect.visible.set(true);
+                if (ImGui.menuItem("Galaxy Viewer")) viewer.visible.set(true);
+                ImGui.endMenu();
+            }
+            ImGui.endMainMenuBar();
+        }
+    }
+
+    private void destroy() {
+        imGuiGl3.dispose(); imGuiGlfw.dispose();
+        ImGui.destroyContext();
+        glfwDestroyWindow(window);
+        glfwTerminate();
     }
 
     public static void main(String[] args) { new Main().run(); }
