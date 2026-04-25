@@ -3,8 +3,6 @@ package com.projektdeus.game.ui;
 import com.projektdeus.game.core.GalaxySettings;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
-import org.lwjgl.PointerBuffer;
-import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.io.File;
@@ -20,6 +18,9 @@ public class ArchitectApp {
     public void render() {
         if (!visible.get()) return;
 
+        // Apply size constraints: Min Width 300, Min Height 400, Max Width 600
+        ImGui.setNextWindowSizeConstraints(300, 400, 600, 10000);
+
         if (ImGui.begin("Galaxy Architect", visible)) {
 
             if (ImGui.collapsingHeader("Global Settings")) {
@@ -30,7 +31,9 @@ public class ArchitectApp {
                 }
 
                 float[] starSize = {s.starSize};
-                if (ImGui.sliderFloat("Star Size", starSize, 1.0f, 15.0f)) s.starSize = starSize[0];
+                if (ImGui.sliderFloat("Star Size", starSize, 1.0f, 15.0f)) {
+                    s.starSize = starSize[0];
+                }
 
                 float[] sersic = {s.sersicIndex};
                 if (ImGui.sliderFloat("Sersic Index", sersic, 0.1f, 5.0f)) {
@@ -44,19 +47,23 @@ public class ArchitectApp {
             }
 
             if (ImGui.collapsingHeader("Core Architecture")) {
-                ImGui.text("Inner Core");
+                ImGui.textColored(0.4f, 0.7f, 1.0f, 1.0f, "Inner Core");
                 float[] icr = {s.innerCoreRadius};
                 if (ImGui.sliderFloat("In Radius##1", icr, 1, 50)) { s.innerCoreRadius = icr[0]; s.needsRegeneration = true; }
                 float[] ics = {s.innerCoreSquish};
                 if (ImGui.sliderFloat("In Squish##1", ics, 0.1f, 1.0f)) { s.innerCoreSquish = ics[0]; s.needsRegeneration = true; }
+                float[] icn = {s.innerCoreNoise};
+                if (ImGui.sliderFloat("In Noise##1", icn, 0, 20)) { s.innerCoreNoise = icn[0]; s.needsRegeneration = true; }
 
                 ImGui.separator();
 
-                ImGui.text("Outer Core");
+                ImGui.textColored(0.4f, 0.7f, 1.0f, 1.0f, "Outer Core");
                 float[] ocr = {s.outerCoreRadius};
                 if (ImGui.sliderFloat("Out Radius##2", ocr, 5, 150)) { s.outerCoreRadius = ocr[0]; s.needsRegeneration = true; }
                 float[] ocs = {s.outerCoreSquish};
                 if (ImGui.sliderFloat("Out Squish##2", ocs, 0.1f, 1.0f)) { s.outerCoreSquish = ocs[0]; s.needsRegeneration = true; }
+                float[] ocn = {s.outerCoreNoise};
+                if (ImGui.sliderFloat("Out Noise##2", ocn, 0, 40)) { s.outerCoreNoise = ocn[0]; s.needsRegeneration = true; }
             }
 
             if (ImGui.collapsingHeader("Arm Morphology")) {
@@ -68,6 +75,16 @@ public class ArchitectApp {
                 if (ImGui.sliderFloat("Start Path", as, 0, 100)) { s.armStart = as[0]; s.needsRegeneration = true; }
                 float[] ae = {s.armEnd};
                 if (ImGui.sliderFloat("End Path", ae, 20, 500)) { s.armEnd = ae[0]; s.needsRegeneration = true; }
+
+                ImGui.separator();
+                float[] iSp = {s.armInnerSpread};
+                if (ImGui.sliderFloat("Inner Spread", iSp, 1, 100)) { s.armInnerSpread = iSp[0]; s.needsRegeneration = true; }
+                float[] oSp = {s.armOuterSpread};
+                if (ImGui.sliderFloat("Outer Spread", oSp, 1, 100)) { s.armOuterSpread = oSp[0]; s.needsRegeneration = true; }
+                float[] iSq = {s.armInnerSquish};
+                if (ImGui.sliderFloat("Inner Squish", iSq, 0.05f, 1.0f)) { s.armInnerSquish = iSq[0]; s.needsRegeneration = true; }
+                float[] oSq = {s.armOuterSquish};
+                if (ImGui.sliderFloat("Outer Squish", oSq, 0.05f, 1.0f)) { s.armOuterSquish = oSq[0]; s.needsRegeneration = true; }
             }
 
             if (ImGui.collapsingHeader("Orientation & Debug")) {
@@ -81,30 +98,17 @@ public class ArchitectApp {
             }
 
             ImGui.separator();
-
-            // --- EXPORT LOGIC ---
             if (ImGui.button("Export Preset")) {
-                String path = TinyFileDialogs.tinyfd_saveFileDialog("Export Galaxy Preset", "my_galaxy.props", null, "Galaxy Preset (*.props)");
+                String path = TinyFileDialogs.tinyfd_saveFileDialog("Export Galaxy", "preset.props", null, "Props File (*.props)");
                 if (path != null) {
-                    try {
-                        s.saveToFile(new File(path));
-                    } catch (Exception ex) {
-                        System.err.println("Failed to save: " + ex.getMessage());
-                    }
+                    try { s.saveToFile(new File(path)); } catch (Exception ex) { ex.printStackTrace(); }
                 }
             }
-
             ImGui.sameLine();
-
-            // --- IMPORT LOGIC ---
             if (ImGui.button("Import Preset")) {
-                String path = TinyFileDialogs.tinyfd_openFileDialog("Import Galaxy Preset", "", null, "Galaxy Preset (*.props)", false);
+                String path = TinyFileDialogs.tinyfd_openFileDialog("Import Galaxy", "", null, "Props File (*.props)", false);
                 if (path != null) {
-                    try {
-                        s.loadFromFile(new File(path));
-                    } catch (Exception ex) {
-                        System.err.println("Failed to load: " + ex.getMessage());
-                    }
+                    try { s.loadFromFile(new File(path)); } catch (Exception ex) { ex.printStackTrace(); }
                 }
             }
         }
