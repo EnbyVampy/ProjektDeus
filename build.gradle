@@ -1,10 +1,11 @@
 plugins {
     id 'java'
-    id 'application' // Added to allow you to run the app directly via Gradle
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
-group = 'com.projektdeus.game'
-version = '1.0-SNAPSHOT'
+group = 'com.projektdeus'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -12,7 +13,7 @@ repositories {
 
 // 1. Centralized Version Management
 project.ext.lwjglVersion = "3.3.3"
-project.ext.imguiVersion = "1.86.11" // Stable version on io.github.spair
+project.ext.imguiVersion = "1.86.11"
 
 // 2. Detect Operating System for Natives
 import org.gradle.internal.os.OperatingSystem
@@ -29,38 +30,38 @@ switch (OperatingSystem.current()) {
 }
 
 dependencies {
-    implementation "org.lwjgl:lwjgl-tinyfd"
-    runtimeOnly "org.lwjgl:lwjgl-tinyfd::$lwjglNatives"
-    // --- GSON for Presets ---
+    // --- Utils ---
     implementation "com.google.code.gson:gson:2.10.1"
 
-    // --- LWJGL Core (Using BOM to keep versions in sync) ---
+    // --- LWJGL Core ---
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-glfw"
     implementation "org.lwjgl:lwjgl-opengl"
     implementation "org.lwjgl:lwjgl-stb"
     implementation "org.lwjgl:lwjgl-nanovg"
+    implementation "org.lwjgl:lwjgl-tinyfd"
 
-    // --- LWJGL Natives (Automatically selects based on your OS) ---
+    // --- LWJGL Natives ---
     runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-nanovg::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-tinyfd::$lwjglNatives"
 
-    // --- ImGui Java Bindings (FIXED COORDINATES) ---
+    // --- ImGui Java Bindings ---
     implementation "io.github.spair:imgui-java-binding:$imguiVersion"
     implementation "io.github.spair:imgui-java-lwjgl3:$imguiVersion"
 
-    // --- ImGui Natives (Multi-platform support) ---
+    // --- ImGui Natives (Included all for portability) ---
     runtimeOnly "io.github.spair:imgui-java-natives-windows:$imguiVersion"
     runtimeOnly "io.github.spair:imgui-java-natives-linux:$imguiVersion"
     runtimeOnly "io.github.spair:imgui-java-natives-macos:$imguiVersion"
 }
 
+// Default run task (Game Client)
 application {
-    // Ensure this matches your file structure exactly
     mainClass = 'com.projektdeus.game.Main'
 }
 
@@ -72,3 +73,39 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
+
+// --- CLIENT JAR TASK ---
+task shadowJarClient(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set('ProjektDeus-Client')
+    archiveClassifier.set('all')
+    from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
+    manifest {
+        attributes('Main-Class': 'com.projektdeus.game.Main')
+    }
+}
+
+// --- SERVER JAR TASK ---
+task shadowJarServer(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+    archiveBaseName.set('ProjektDeus-Server')
+    archiveClassifier.set('all')
+    from sourceSets.main.output
+    configurations = [project.configurations.runtimeClasspath]
+
+    // Optimization: Exclude heavy graphics libraries from the server build
+    dependencies {
+        exclude(dependency('org.lwjgl:.*'))
+        exclude(dependency('io.github.spair:.*'))
+    }
+
+    manifest {
+        attributes('Main-Class': 'com.projektdeus.server.ServerMain')
+    }
+}
+
+// Ensure standard build produces both
+build.dependsOn shadowJarClient
+build.dependsOn shadowJarServer
+
+// Clean up the default shadowJar task to avoid confusion
+shadowJar.enabled = false

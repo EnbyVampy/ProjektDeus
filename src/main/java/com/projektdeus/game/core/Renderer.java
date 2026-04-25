@@ -7,10 +7,9 @@ public class Renderer {
     public void render(GalaxyData galaxy, GalaxySettings settings, int selectedIdx) {
         if (galaxy.starPositions == null) return;
 
-        // Draw Ground Plane
-        if (settings.showFloor) drawStaticGround(settings.armEnd);
+        // Ground Plane is now essentially the "World Floor"
+        if (settings.showFloor) drawWorldFloor(settings.armEnd);
 
-        // Render Stars
         glPointSize(settings.starSize);
         glEnable(GL_POINT_SMOOTH);
         glBegin(GL_POINTS);
@@ -20,7 +19,6 @@ public class Renderer {
         }
         glEnd();
 
-        // Draw Selection Ring
         if (selectedIdx >= 0) {
             drawSelectionRing(galaxy.starPositions[selectedIdx * 3],
                     galaxy.starPositions[selectedIdx * 3 + 1],
@@ -28,26 +26,21 @@ public class Renderer {
         }
     }
 
-    public void renderGizmo(Camera cam, GalaxySettings s) {
-        // Draw the Axis Tripod in the corner
+    public void renderGizmo(Camera cam) {
         glPushMatrix();
         glLoadIdentity();
-        glTranslatef(0, 0, -5); // Move into view
+        glTranslatef(0, 0, -5);
 
-        // Match the total rotation of the galaxy
+        // This only rotates with your mouse, NOT with the galaxy tilt
+        // Making it a stable reference compass
         glRotatef(cam.rotX, 1, 0, 0);
         glRotatef(cam.rotY, 0, 1, 0);
-        glRotatef(s.galaxyRotX, 1, 0, 0);
-        glRotatef(s.galaxyRotY, 0, 1, 0);
 
         glLineWidth(2.0f);
         glBegin(GL_LINES);
-        // X - Red
-        glColor3f(1, 0, 0); glVertex3f(0,0,0); glVertex3f(1,0,0);
-        // Y - Green
-        glColor3f(0, 1, 0); glVertex3f(0,0,0); glVertex3f(0,1,0);
-        // Z - Blue
-        glColor3f(0, 0.5f, 1); glVertex3f(0,0,0); glVertex3f(0,0,1);
+        glColor3f(1, 0, 0); glVertex3f(0,0,0); glVertex3f(1,0,0); // X
+        glColor3f(0, 1, 0); glVertex3f(0,0,0); glVertex3f(0,1,0); // Y
+        glColor3f(0, 0.5f, 1); glVertex3f(0,0,0); glVertex3f(0,0,1); // Z
         glEnd();
         glLineWidth(1.0f);
         glPopMatrix();
@@ -58,7 +51,7 @@ public class Renderer {
         glTranslatef(x, y, z);
         glColor3f(0, 1, 1);
         glBegin(GL_LINE_LOOP);
-        for(int i=0; i<32; i++) {
+        for(int i=0; i<32; i++){
             double a = Math.PI*2*i/32;
             glVertex3f((float)Math.cos(a)*(size*0.1f+0.3f), 0, (float)Math.sin(a)*(size*0.1f+0.3f));
         }
@@ -66,10 +59,10 @@ public class Renderer {
         glPopMatrix();
     }
 
-    private void drawStaticGround(float r) {
+    private void drawWorldFloor(float r) {
         glColor4f(0.2f, 0.2f, 0.3f, 0.4f);
         glBegin(GL_LINE_LOOP);
-        for(int i=0; i<64; i++) {
+        for(int i=0; i<64; i++){
             double a = Math.PI*2*i/64;
             glVertex3f((float)Math.cos(a)*r, 0, (float)Math.sin(a)*r);
         }

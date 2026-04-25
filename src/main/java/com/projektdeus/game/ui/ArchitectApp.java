@@ -18,7 +18,6 @@ public class ArchitectApp {
     public void render() {
         if (!visible.get()) return;
 
-        // Apply size constraints: Min Width 300, Min Height 400, Max Width 600
         ImGui.setNextWindowSizeConstraints(300, 400, 600, 10000);
 
         if (ImGui.begin("Galaxy Architect", visible)) {
@@ -87,14 +86,20 @@ public class ArchitectApp {
                 if (ImGui.sliderFloat("Outer Squish", oSq, 0.05f, 1.0f)) { s.armOuterSquish = oSq[0]; s.needsRegeneration = true; }
             }
 
-            if (ImGui.collapsingHeader("Orientation & Debug")) {
+            if (ImGui.collapsingHeader("Galaxy Orientation (Baked Tilt)")) {
                 ImBoolean showFloor = new ImBoolean(s.showFloor);
-                if (ImGui.checkbox("Show Static Ground Plane", showFloor)) s.showFloor = showFloor.get();
+                if (ImGui.checkbox("Show World Floor", showFloor)) s.showFloor = showFloor.get();
 
-                float[] rotX = {s.galaxyRotX};
-                if (ImGui.sliderFloat("Galaxy Rot X", rotX, 0, 360)) s.galaxyRotX = rotX[0];
-                float[] rotY = {s.galaxyRotY};
-                if (ImGui.sliderFloat("Galaxy Rot Y", rotY, 0, 360)) s.galaxyRotY = rotY[0];
+                float[] tX = {s.galaxyTiltX};
+                if (ImGui.sliderFloat("Galaxy Tilt X", tX, 0, 360)) {
+                    s.galaxyTiltX = tX[0];
+                    s.needsRegeneration = true; // Bake tilt into positions
+                }
+                float[] tY = {s.galaxyTiltY};
+                if (ImGui.sliderFloat("Galaxy Tilt Y", tY, 0, 360)) {
+                    s.galaxyTiltY = tY[0];
+                    s.needsRegeneration = true; // Bake tilt into positions
+                }
             }
 
             ImGui.separator();

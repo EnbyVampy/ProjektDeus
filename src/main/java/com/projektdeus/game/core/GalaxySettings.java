@@ -6,15 +6,15 @@ import java.util.Properties;
 public class GalaxySettings {
     public volatile boolean needsRegeneration = true;
 
-    // Global & Debug
+    // Global
     public int starCount = 5000;
     public float starSize = 3.0f;
     public float sersicIndex = 1.0f;
-    public boolean showFloor = false; // Disabled by default
+    public boolean showFloor = false;
 
-    // Galaxy Orientation
-    public float galaxyRotX = 0.0f;
-    public float galaxyRotY = 0.0f;
+    // Baked Tilt (Changes the actual data)
+    public float galaxyTiltX = 0.0f;
+    public float galaxyTiltY = 0.0f;
 
     // Linked Distribution (%)
     public float innerCorePercent = 20.0f;
@@ -50,8 +50,8 @@ public class GalaxySettings {
         p.setProperty("starSize", String.valueOf(starSize));
         p.setProperty("sersicIndex", String.valueOf(sersicIndex));
         p.setProperty("showFloor", String.valueOf(showFloor));
-        p.setProperty("galaxyRotX", String.valueOf(galaxyRotX));
-        p.setProperty("galaxyRotY", String.valueOf(galaxyRotY));
+        p.setProperty("galaxyTiltX", String.valueOf(galaxyTiltX));
+        p.setProperty("galaxyTiltY", String.valueOf(galaxyTiltY));
         p.setProperty("innerCorePercent", String.valueOf(innerCorePercent));
         p.setProperty("outerCorePercent", String.valueOf(outerCorePercent));
         p.setProperty("armsPercent", String.valueOf(armsPercent));
@@ -80,8 +80,8 @@ public class GalaxySettings {
         starSize = Float.parseFloat(p.getProperty("starSize", "3.0"));
         sersicIndex = Float.parseFloat(p.getProperty("sersicIndex", "1.0"));
         showFloor = Boolean.parseBoolean(p.getProperty("showFloor", "false"));
-        galaxyRotX = Float.parseFloat(p.getProperty("galaxyRotX", "0.0"));
-        galaxyRotY = Float.parseFloat(p.getProperty("galaxyRotY", "0.0"));
+        galaxyTiltX = Float.parseFloat(p.getProperty("galaxyTiltX", "0.0"));
+        galaxyTiltY = Float.parseFloat(p.getProperty("galaxyTiltY", "0.0"));
         innerCorePercent = Float.parseFloat(p.getProperty("innerCorePercent", "20.0"));
         outerCorePercent = Float.parseFloat(p.getProperty("outerCorePercent", "30.0"));
         armsPercent = Float.parseFloat(p.getProperty("armsPercent", "50.0"));
